@@ -85,15 +85,31 @@
       z-index: 1;
     }
     @media (max-width: 768px) {
-      .photo {
-        width: 200px;
-        height: 300px;
-      }
-      .caption {
-        font-size: 0.8em;
-        padding: 6px;
-      }
-    }
+    .photo {
+    width: 90vw;
+    height: auto;
+    max-height: 75vh;
+    border-width: 6px;
+  }
+  @media (max-width: 768px) {
+  #startButtonContainer button {
+    font-size: 1.3em;
+    padding: 14px 30px;
+    max-width: 90vw;
+    white-space: nowrap;
+  }
+
+  #startButtonContainer {
+    padding: 20px;
+  }
+}
+
+  .caption {
+    font-size: 0.85em;
+    padding: 8px;
+  }
+}
+
   </style>
 </head>
 <body>
