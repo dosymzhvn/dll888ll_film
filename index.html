@@ -5,24 +5,19 @@
   <title>Кино о ней 🎞️</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Great+Vibes&display=swap" rel="stylesheet">
-
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-     background: radial-gradient(ellipse at center, #bd7f58 0%, #1c120c 100%);
-     color: #fff;
-     font-family: Georgia, serif;
-     overflow: hidden;
-}
-
-
+      background: radial-gradient(ellipse at center, #bd7f58 0%, #1c120c 100%);
+      color: #fff;
+      font-family: Georgia, serif;
+      overflow: hidden;
+    }
     .start-screen {
       position: fixed;
       top: 0; left: 0;
-      width: 100%;
-      height: 100vh;
+      width: 100%; height: 100vh;
       background: #000;
       display: flex;
       flex-direction: column;
@@ -31,34 +26,15 @@
       z-index: 10;
       text-align: center;
     }
-
     .start-screen h1 {
       font-size: 1.6em;
       margin-bottom: 20px;
       max-width: 90%;
-      text-align: center;
     }
-
-    .start-screen .author {
-      font-size: 1em;
-      color: #f1c40f;
-      margin-bottom: 20px;
-    }
-
     .countdown {
       font-size: 4em;
       font-weight: bold;
-      animation: countFade 5s steps(5, end);
     }
-
-    @keyframes countFade {
-      0% { content: "5"; }
-      20% { content: "4"; }
-      40% { content: "3"; }
-      60% { content: "2"; }
-      80% { content: "1"; }
-    }
-
     .stage {
       width: 100vw;
       height: 100vh;
@@ -68,49 +44,28 @@
       align-items: center;
       justify-content: center;
     }
-   .track {
-        display: flex;
-        transition: transform 1s ease-in-out;
-        box-sizing: content-box;
-        justify-content: flex-start;
-        position: relative;
-        left: 50%;
-        transform: translateX(-50%);
-}
-
-    .frame {
+    .photo {
+      position: absolute;
       width: 280px;
       height: 400px;
-      margin: 0 20px;
       background: #111;
       border: 10px solid #2e2e2e;
       border-radius: 8px;
       box-shadow: 0 0 20px rgba(255,255,255,0.1);
       overflow: hidden;
-      filter: blur(5px) brightness(0.5);
-      opacity: 0.4;
-      transform: scale(0.9);
+      opacity: 0;
+      transform: translateX(100%);
       transition: all 1s ease-in-out;
-      flex-shrink: 0;
-      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-
-    .frame.active {
-      filter: none;
-      opacity: 1;
-      transform: scale(1.05);
-      z-index: 3;
-    }
-
-    .frame img {
+    .photo img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-
     .caption {
-      position: absolute;
-      bottom: 0;
       width: 100%;
       background: rgba(0,0,0,0.6);
       color: #ffeac7;
@@ -119,237 +74,147 @@
       font-style: italic;
       font-size: 0.95em;
     }
-
-    /* 📱 Мобильная адаптация */
+    .photo.show {
+      opacity: 1;
+      transform: translateX(0);
+      z-index: 2;
+    }
+    .photo.hide-left {
+      opacity: 0;
+      transform: translateX(-100%);
+      z-index: 1;
+    }
     @media (max-width: 768px) {
-      .frame {
+      .photo {
         width: 200px;
         height: 300px;
-        margin: 0 10px;
       }
-
       .caption {
         font-size: 0.8em;
         padding: 6px;
       }
-
-      .start-screen h1 {
-        font-size: 1.2em;
-      }
-
-      .countdown {
-        font-size: 3em;
-      }
-    }
-
-    audio {
-      display: none;
     }
   </style>
 </head>
 <body>
-<!-- 🔘 КНОПКА СТАРТА -->
-<!-- КНОПКА СТАРТА -->
-<div id="startButtonContainer" style="
-  position: fixed;
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: radial-gradient(ellipse at center, #3a2c23 0%, #1c120c 100%);
-  z-index: 20;
-  font-family: 'Cinzel', serif;
-">
-
-  <button onclick="startSequence()" style="
-    font-size: 2em;
-    padding: 18px 50px;
-    background: linear-gradient(145deg, #c8a05a, #8d6b32);
-    color: #fff7e6;
-    border: 2px solid #e3c589;
-    border-radius: 16px;
-    cursor: pointer;
-    box-shadow: 0 0 30px rgba(255, 212, 135, 0.2);
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-    transition: all 0.4s ease;
-  "
-  onmouseover="this.style.background='linear-gradient(145deg, #b38b46, #7c5f2a)'; this.style.boxShadow='0 0 40px rgba(255, 200, 120, 0.4)'"
-  onmouseout="this.style.background='linear-gradient(145deg, #c8a05a, #8d6b32)'; this.style.boxShadow='0 0 30px rgba(255, 212, 135, 0.2)'"
-  >начнем)</button>
-
-</div>
-
-
-
-<!-- ⏳ ТИТР -->
-<div class="start-screen" id="startScreen">
-  <h1>Осторожно, эта красота вас будет ослеплять.<br>Специально для Дилека</h1>
-  <div class="countdown" id="countText">5</div>
-</div>
-
-<!-- 🎞️ СЦЕНА -->
-<div class="stage">
-  <div class="track" id="track">
-  <div class="frame"><img src="girl1.jpg"><div class="caption">С этой улыбки всё началось.</div></div>
-  <div class="frame"><img src="girl2.jpg"><div class="caption">Ты — как кадр, что хочется пересматривать.</div></div>
-  <div class="frame"><img src="girl3.jpg"><div class="caption">Яркая, как сцена на закате.</div></div>
-  <div class="frame"><img src="girl4.jpg"><div class="caption">Ты как кино, где я — зритель навсегда.</div></div>
-  <div class="frame"><img src="girl5.jpg"><div class="caption">Свет, камера, ты — и мир замер.</div></div>
-  <div class="frame"><img src="girl6.jpg"><div class="caption">Твои глаза — сцена без дублей.</div></div>
-  <div class="frame"><img src="girl7.jpg"><div class="caption">Каждый миг с тобой — кино, где счастье в кадре.</div></div>
-  <div class="frame"><img src="girl8.jpg"><div class="caption">Нежность в каждом ракурсе.</div></div>
-  <div class="frame"><img src="girl9.jpg"><div class="caption">Ты — мой самый любимый фильм.</div></div>
-  <div class="frame"><img src="girl10.jpg"><div class="caption">Секунда — и снова влюблён.</div></div>
-  <div class="frame"><img src="girl11.jpg"><div class="caption">Свет отражается — как ты во мне.</div></div>
-  <div class="frame"><img src="girl12.jpg"><div class="caption">Такой кадр не забудешь.</div></div>
-  <div class="frame"><img src="girl13.jpg"><div class="caption">Ты — как сцена в финале: сильная, красивая.</div></div>
-  <div class="frame"><img src="girl14.jpg"><div class="caption">Ты моё любимое кино.</div></div>
-  <div class="frame"><img src="girl15.jpg"><div class="caption">Этот фильм — только для тебя.</div></div>
-  <div class="frame"><img src="girl16.jpg"><div class="caption">Без титров. Без дублей. Только чувства.</div></div>
-  <div class="frame"><img src="girl17.jpg"><div class="caption">Ты — последняя сцена, которую не хочу заканчивать.</div></div>
-  <div class="frame"><img src="girl18.jpg"><div class="caption">Даже после "конец" — я с тобой.</div></div>
-  <div class="frame"><img src="girl19.jpg"><div class="caption">Фильм окончен. Но история продолжается.</div></div>
-  <div class="frame"><img src="girl20.jpg"><div class="caption">Навсегда в сердце. Навсегда ты.</div></div>
-</div>
-
-</div>
-<!-- 🔈 АУДИО -->
-<audio id="bgMusic" loop>
-  <source src="suigenim.mp3" type="audio/mpeg" />
-</audio>
-
-<audio id="countSound">
-  <source src="countdown.mp3" type="audio/mpeg" />
-</audio>
-<script>
-  let index = 0;
-  const frames = document.querySelectorAll('.frame');
-  const track = document.getElementById('track');
-  const music = document.getElementById('bgMusic');
-  const countSound = document.getElementById('countSound');
-  const countdown = document.getElementById('countText');
-  const startScreen = document.getElementById('startScreen');
-  const startButton = document.getElementById('startButtonContainer');
-
-  function focusFrame(i) {
-  frames.forEach(frame => frame.classList.remove('active'));
-  if (frames[i]) frames[i].classList.add('active');
-
-  const frameWidth = frames[i].offsetWidth + 40; // ширина фрейма + margin
-  const offset = i * frameWidth;
-
-  track.style.transform = `translateX(calc(50vw - ${frameWidth / 2}px - ${offset}px))`;
-}
-
-window.addEventListener('resize', () => {
-  focusFrame(index);
-});
-
-  function showCountdownNumbers(callbackAfter) {
-
-    let count = 5;
-    countdown.textContent = count;
-
-    const interval = setInterval(() => {
-      count--;
-      if (count > 0) {
-        countdown.textContent = count;
-      } else {
-        clearInterval(interval);
-        callbackAfter();
-      }
-    }, 1325); // немного медленнее
-  }
-
-  function startSequence() {
-    startButton.style.display = 'none';
-    startScreen.style.display = 'flex';
-    
-    // 1 сек пауза перед стартом отсчёта
-    setTimeout(() => {
-      countSound.currentTime = 0;
-      countSound.play();
-      showCountdownNumbers(() => {
-        focusFrame(0);
-        countdown.textContent = "Начинаем...";
-
-        setTimeout(() => {
-          startScreen.style.display = 'none';
-          music.currentTime = 0;
-          music.play();
-          
-
-          const interval = setInterval(() => {
-            index++;
-            if (index < frames.length) {
-            focusFrame(index);
-}             else {
-        clearInterval(interval);
-  const final = document.getElementById('finalScreen');
-  final.style.display = 'flex';
-  setTimeout(() => {
-    final.style.opacity = 1;
-  }, 100);
-}
-
-          }, 6000);
-        }, 1500);
-      });
-    }, 1000);
-  }
-</script>
-
-<!-- 🟫 ФИНАЛЬНАЯ СЦЕНА -->
-<div id="finalScreen" style="
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background: radial-gradient(ellipse at center, #1a1009, #000);
-  color: #f7d6b1;
-  font-family: 'Cinzel', serif;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  z-index: 999;
-  opacity: 0;
-  transition: opacity 2s ease;
-">
-  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
-    <h1 style="font-size: 2.2em; margin-bottom: 20px; letter-spacing: 1px;">Спасибо за просмотр</h1>
-
-    <p style="
-      font-family: 'Great Vibes', cursive;
-      font-size: 2.4em;
-      color: #ffe6c7;
-      margin-bottom: 40px;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
-    ">
-      С любовью, далбаеп 💛
-    </p>
-
-    <button onclick="location.reload()" style="
-      font-size: 1em;
-      padding: 14px 34px;
-      background: linear-gradient(145deg, #cfa56e, #9d6b3e);
-      color: #fff;
-      border: none;
-      border-radius: 14px;
-      cursor: pointer;
-      font-family: 'Cinzel', serif;
-      box-shadow: 0 0 25px rgba(255, 200, 120, 0.3);
-      transition: all 0.3s ease;
-    "
-    onmouseover="this.style.background='linear-gradient(145deg, #b38656, #7c522c)'"
-    onmouseout="this.style.background='linear-gradient(145deg, #cfa56e, #9d6b3e)'"
-    >Пересмотреть ещё раз</button>
+  <div id="startButtonContainer" style="position: fixed; width: 100%; height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(ellipse at center, #3a2c23 0%, #1c120c 100%); z-index: 20; font-family: 'Cinzel', serif;">
+    <button onclick="startSequence()" style="font-size: 2em; padding: 18px 50px; background: linear-gradient(145deg, #c8a05a, #8d6b32); color: #fff7e6; border: 2px solid #e3c589; border-radius: 16px; cursor: pointer; box-shadow: 0 0 30px rgba(255, 212, 135, 0.2); text-shadow: 1px 1px 2px rgba(0,0,0,0.5); transition: all 0.4s ease;">начнем)</button>
   </div>
-</div>
 
+  <div class="start-screen" id="startScreen">
+    <h1>Осторожно, эта красота вас будет ослеплять.<br>Специально для Дилека</h1>
+    <div class="countdown" id="countText">5</div>
+  </div>
 
+  <div class="stage" id="photoContainer">
+    <!-- Здесь будет JavaScript вставлять фото -->
+  </div>
+
+  <audio id="bgMusic" loop>
+    <source src="suigenim.mp3" type="audio/mpeg" />
+  </audio>
+  <audio id="countSound">
+    <source src="countdown.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    const captions = [
+      "С этой улыбки всё началось.",
+      "Ты — как кадр, что хочется пересматривать.",
+      "Яркая, как сцена на закате.",
+      "Ты как кино, где я — зритель навсегда.",
+      "Свет, камера, ты — и мир замер.",
+      "Твои глаза — сцена без дублей.",
+      "Каждый миг с тобой — кино, где счастье в кадре.",
+      "Нежность в каждом ракурсе.",
+      "Ты — мой самый любимый фильм.",
+      "Секунда — и снова влюблён.",
+      "Свет отражается — как ты во мне.",
+      "Такой кадр не забудешь.",
+      "Ты — как сцена в финале: сильная, красивая.",
+      "Ты моё любимое кино.",
+      "Этот фильм — только для тебя.",
+      "Без титров. Без дублей. Только чувства.",
+      "Ты — последняя сцена, которую не хочу заканчивать.",
+      "Даже после \"конец\" — я с тобой.",
+      "Фильм окончен. Но история продолжается.",
+      "Навсегда в сердце. Навсегда ты."
+    ];
+
+    const container = document.getElementById("photoContainer");
+    captions.forEach((text, i) => {
+      const photo = document.createElement("div");
+      photo.className = "photo" + (i === 0 ? " show" : "");
+      photo.innerHTML = `<img src="girl${i+1}.jpg"><div class="caption">${text}</div>`;
+      container.appendChild(photo);
+    });
+
+    const photos = document.querySelectorAll('.photo');
+    let index = 0;
+
+    function slideNext() {
+      if (index < photos.length - 1) {
+        photos[index].classList.remove("show");
+        photos[index].classList.add("hide-left");
+        index++;
+        photos[index].classList.add("show");
+      } else {
+        clearInterval(slideInterval);
+        const final = document.getElementById('finalScreen');
+        final.style.display = 'flex';
+        setTimeout(() => { final.style.opacity = 1; }, 100);
+      }
+    }
+
+    let slideInterval;
+    const countdown = document.getElementById('countText');
+    const startScreen = document.getElementById('startScreen');
+    const startButton = document.getElementById('startButtonContainer');
+    const music = document.getElementById('bgMusic');
+    const countSound = document.getElementById('countSound');
+
+    function showCountdownNumbers(callbackAfter) {
+      let count = 5;
+      countdown.textContent = count;
+      const interval = setInterval(() => {
+        count--;
+        if (count > 0) countdown.textContent = count;
+        else {
+          clearInterval(interval);
+          callbackAfter();
+        }
+      }, 1325);
+    }
+
+    function startSequence() {
+      startButton.style.display = 'none';
+      startScreen.style.display = 'flex';
+      setTimeout(() => {
+        countSound.play();
+        showCountdownNumbers(() => {
+          countdown.textContent = "Начинаем...";
+          setTimeout(() => {
+            startScreen.style.display = 'none';
+            music.play();
+            slideInterval = setInterval(slideNext, 6000);
+          }, 1000);
+        });
+      }, 1500);
+    }
+  </script>
+
+  <div id="finalScreen" style="display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:radial-gradient(ellipse at center, #1a1009, #000);color:#f7d6b1;font-family:'Cinzel',serif;flex-direction:column;align-items:center;justify-content:center;text-align:center;z-index:999;opacity:0;transition:opacity 2s ease;">
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+      <h1 style="font-size: 2.2em; margin-bottom: 20px; letter-spacing: 1px;">Спасибо за просмотр</h1>
+      <p style="font-family: 'Great Vibes', cursive; font-size: 2.4em; color: #ffe6c7; margin-bottom: 40px; text-shadow: 1px 1px 3px rgba(0,0,0,0.4);">
+        С любовью, далбаеп 💛
+      </p>
+      <button onclick="location.reload()" style="font-size: 1em; padding: 14px 34px; background: linear-gradient(145deg, #cfa56e, #9d6b3e); color: #fff; border: none; border-radius: 14px; cursor: pointer; font-family: 'Cinzel', serif; box-shadow: 0 0 25px rgba(255, 200, 120, 0.3); transition: all 0.3s ease;"
+        onmouseover="this.style.background='linear-gradient(145deg, #b38656, #7c522c)'"
+        onmouseout="this.style.background='linear-gradient(145deg, #cfa56e, #9d6b3e)'">
+        Пересмотреть ещё раз
+      </button>
+    </div>
+  </div>
 </body>
 </html>
