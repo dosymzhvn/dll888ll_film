@@ -68,14 +68,15 @@
       align-items: center;
       justify-content: center;
     }
-
-    .track {
-      display: flex;
-      transition: transform 1s ease-in-out;
-      min-width: 100vw;
-      padding-left: 50vw;
-      box-sizing: content-box;
-    }
+   .track {
+        display: flex;
+        transition: transform 1s ease-in-out;
+        box-sizing: content-box;
+        justify-content: flex-start;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+}
 
     .frame {
       width: 280px;
@@ -232,15 +233,21 @@
   const startButton = document.getElementById('startButtonContainer');
 
   function focusFrame(i) {
-    frames.forEach((frame) => frame.classList.remove('active'));
-    if (frames[i]) frames[i].classList.add('active');
+  frames.forEach(frame => frame.classList.remove('active'));
+  if (frames[i]) frames[i].classList.add('active');
 
-    const offset = i * (280 + 40);
-    const center = window.innerWidth / 2 - 140;
-    track.style.transform = `translateX(-${offset - center}px)`;
-  }
+  const frameWidth = frames[i].offsetWidth + 40; // ширина фрейма + margin
+  const offset = i * frameWidth;
+
+  track.style.transform = `translateX(calc(50vw - ${frameWidth / 2}px - ${offset}px))`;
+}
+
+window.addEventListener('resize', () => {
+  focusFrame(index);
+});
 
   function showCountdownNumbers(callbackAfter) {
+
     let count = 5;
     countdown.textContent = count;
 
@@ -264,13 +271,14 @@
       countSound.currentTime = 0;
       countSound.play();
       showCountdownNumbers(() => {
+        focusFrame(0);
         countdown.textContent = "Начинаем...";
 
         setTimeout(() => {
           startScreen.style.display = 'none';
           music.currentTime = 0;
           music.play();
-          focusFrame(0);
+          
 
           const interval = setInterval(() => {
             index++;
